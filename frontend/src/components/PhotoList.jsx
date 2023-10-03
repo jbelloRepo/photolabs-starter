@@ -57,14 +57,14 @@ const sampleDataForPhotoList = [
   },
 ];
 
-const PhotoList = (props) => {
+const PhotoList = () => {
   return (
     <ul className="photo-list">
-      {props.photos.map((photo, id) => (
+      {sampleDataForPhotoList.map(photo => (
         <PhotoListItem key={photo.id} {...photo} />
       ))}
     </ul>
   );
-};
+}
 
 export default PhotoList;
