@@ -1,18 +1,44 @@
 import React from "react";
 import "../styles/PhotoListItem.scss";
 import PhotoFavButton from "./PhotoFavButton";
-
+import { useFavorites } from "./FavoriteContext";
 
 const PhotoListItem = (props) => {
+  const { favorites, setFavorites } = useFavorites();
+
+  const isFavorited = favorites.includes(props.id);
+
+  const toggleFavorite = () => {
+    if (isFavorited) {
+      setFavorites((prevFavs) =>
+        prevFavs.filter((favId) => favId !== props.id)
+      );
+    } else {
+      setFavorites((prevFavs) => [...prevFavs, props.id]);
+    }
+  };
+
   return (
     <section className="photo-list__item">
       <div>
-        <PhotoFavButton />
-        <img className="photo-list__image" alt="Item" src={props.urls.regular} />
+        <PhotoFavButton
+          photoId={props.id}
+          isFavorited={isFavorited}
+          onClick={toggleFavorite}
+        />
+        <img
+          className="photo-list__image"
+          alt="Item"
+          src={props.urls.regular}
+        />
       </div>
       <div className="photo-list__user-details">
         <div>
-          <img className="photo-list__user-profile" alt="User Profile" src={props.user.profile} />
+          <img
+            className="photo-list__user-profile"
+            alt="User Profile"
+            src={props.user.profile}
+          />
         </div>
         <div className="photo-list__user-info">
           {props.user.username}
