@@ -2,6 +2,7 @@ import React from "react";
 import "../styles/PhotoListItem.scss";
 import PhotoFavButton from "./PhotoFavButton";
 import { useFavorites } from "./FavoriteContext";
+import { useModal } from "./ModalContext";
 
 const PhotoListItem = (props) => {
   const { favorites, setFavorites } = useFavorites();
@@ -18,8 +19,16 @@ const PhotoListItem = (props) => {
     }
   };
 
+  const { setIsModalOpen } = useModal();
+
   return (
-    <section className="photo-list__item">
+    <section
+      className="photo-list__item"
+      onClick={() => {
+        console.log("Photo clicked!");
+        setIsModalOpen(true);
+      }}
+    >
       <div>
         <PhotoFavButton
           photoId={props.id}
