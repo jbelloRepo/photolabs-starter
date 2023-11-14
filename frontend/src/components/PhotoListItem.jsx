@@ -1,56 +1,30 @@
 import React from "react";
-import "../styles/PhotoListItem.scss";
 import PhotoFavButton from "./PhotoFavButton";
-import { useFavorites } from "./FavoriteContext";
-import { useModal } from "./ModalContext";
+import "../styles/PhotoListItem.scss";
 
 const PhotoListItem = (props) => {
-  const { favorites, setFavorites } = useFavorites();
-
-  const isFavorited = favorites.includes(props.id);
-
-  const toggleFavorite = () => {
-    if (isFavorited) {
-      setFavorites((prevFavs) =>
-        prevFavs.filter((favId) => favId !== props.id)
-      );
-    } else {
-      setFavorites((prevFavs) => [...prevFavs, props.id]);
-    }
-  };
-
-  const { setIsModalOpen } = useModal();
+  const isFavorite = props.favorites && props.favorites.includes(props.id);
 
   return (
-    <section
-      className="photo-list__item"
-      onClick={() => {
-        console.log("Photo clicked!");
-        setIsModalOpen(true);
-      }}
-    >
+    <section className="photo-list__item">
       <div>
         <PhotoFavButton
           photoId={props.id}
-          isFavorited={isFavorited}
-          onClick={toggleFavorite}
+          isFavorite={isFavorite}
+          toggleFavorite={props.toggleFavorite}
         />
         <img
           className="photo-list__image"
-          alt="Item"
           src={props.urls.regular}
+          onClick={() => props.showModal(props.id)}
         />
       </div>
       <div className="photo-list__user-details">
         <div>
-          <img
-            className="photo-list__user-profile"
-            alt="User Profile"
-            src={props.user.profile}
-          />
+          <img className="photo-list__user-profile" src={props.user.profile} />
         </div>
         <div className="photo-list__user-info">
-          {props.user.username}
+          {props.user.name}
           <div className="photo-list__user-location">
             {`${props.location.city}, ${props.location.country}`}
           </div>

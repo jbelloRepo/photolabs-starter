@@ -1,24 +1,39 @@
 import React from "react";
 import "./App.scss";
-import PhotoList from "./components/PhotoList";
-import TopicList from "./components/TopicList";
-import { FavoriteProvider } from "./components/FavoriteContext";
 import HomeRoute from "routes/HomeRoute";
-import topics from "./mocks/topics.js";
-import photos from "./mocks/photos.js";
-import { ModalProvider } from "./components/ModalContext";
-import PhotoDetailsModal from "./routes/PhotoDetailsModal.jsx";
+import useApplicationData from "./hooks/useApplicationData";
+import PhotoDetailsModal from "routes/PhotoDetailsModal";
 
 const App = () => {
+  const { state, toggleFavorite, showModal, closeModal, fetchPhotosByTopic } =
+    useApplicationData();
+
+  const { favorites, modal, topicData, photoData } = state;
+  const selectedPhotoId = modal;
+  const selectedPhoto = photoData.find((photo) => photo.id === selectedPhotoId);
+
   return (
-    <ModalProvider>
-      <FavoriteProvider>
-        <div className="App">
-          <HomeRoute topics={topics} photos={photos} />
-          <PhotoDetailsModal />
-        </div>
-      </FavoriteProvider>
-    </ModalProvider>
+    <div className="App">
+      <HomeRoute
+        topics={state.topicData}
+        photos={state.photoData}
+        favorites={favorites}
+        toggleFavorite={toggleFavorite}
+        isFavPhotoExist={favorites.length > 0}
+        showModal={showModal}
+        fetchPhotosByTopic={fetchPhotosByTopic}
+      />
+      {modal && selectedPhoto && (
+        <PhotoDetailsModal
+          photo={selectedPhoto}
+          similarPhotos={selectedPhoto.similar_photos}
+          closeModal={closeModal}
+          favorites={favorites}
+          toggleFavorite={toggleFavorite}
+          isFavPhotoExist={favorites.length > 0}
+        />
+      )}
+    </div>
   );
 };
 

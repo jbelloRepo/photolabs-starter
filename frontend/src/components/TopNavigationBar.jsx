@@ -1,17 +1,19 @@
 import React from "react";
-import "../styles/TopNavigationBar.scss";
 import TopicList from "./TopicList";
 import FavBadge from "./FavBadge";
-import { useFavorites } from "./FavoriteContext";
+import "../styles/TopNavigationBar.scss";
 
-const TopNavigation = ({ topics }) => {
-  const { favorites } = useFavorites();
-
+const TopNavigation = (props) => {
+  const handleTopicClick = (topicId) => {
+    if (props.onTopicClick) {
+      props.onTopicClick(topicId);
+    }
+  };
   return (
     <div className="top-nav-bar">
       <span className="top-nav-bar__logo">PhotoLabs</span>
-      <TopicList topics={topics} />
-      <FavBadge favoriteCount={favorites.length} />
+      <TopicList topics={props.topics} onTopicClick={handleTopicClick} />
+      <FavBadge isFavPhotoExist={props.isFavPhotoExist} />
     </div>
   );
 };
